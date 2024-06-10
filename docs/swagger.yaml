@@ -1,0 +1,69 @@
+basePath: /
+definitions:
+  models.TrianglesHTTPResponse:
+    properties:
+      number_of_triangles:
+        type: integer
+      surface_area:
+        type: number
+    type: object
+  utils.HTTPResponse:
+    properties:
+      data: {}
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server for analyzing STL files.
+  termsOfService: http://swagger.io/terms/
+  title: STL File Analysis API
+  version: "1.0"
+paths:
+  /stl/triangles:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Receives an STL file and returns the number of triangles and the
+        surface area
+      parameters:
+      - description: STL file
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.HTTPResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.TrianglesHTTPResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.HTTPResponse'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.HTTPResponse'
+      summary: Get number of triangles and surface area of an STL file
+      tags:
+      - stl
+swagger: "2.0"
